@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title></title>
+</head>
+<!-- <div class="bg-orange-500 shadow-lg shadow-orange-500/50 rounded-lg text-black text-3xl font-bold px-1">Notes</div> -->
+<body class="bg-black bg-blend-screen text-white">
+    <div class="heading m-16">
+        <div class="title text-3xl font-bold text-center flex justify-center">MyNotes  </div>
+    </div>
+    <div class="container">
+        <div class="m-16">
+            <div class="mb-6">
+                <label for="title" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Title</label>
+                <input type="text" id="title"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder=" " required>
+            </div>
+            <div class="mb-6">
+                <label for="Description"
+                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Description</label>
+                <input type="text" id="description"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    required>
+            </div>
+
+            <button class="bg-orange-500 shadow-lg shadow-orange-500/50 p-2 rounded-lg font-bold pl-6 pr-6 "
+                id="add">Add
+                Note</button>
+        </div>
+        <div class="content m-16">
+            <div class="heading font-bold text-3xl" id="body">Notes</div><br>
+            
+
+        </div>
+
+    </div>
+    <script>
+        console.log("working")
+
+        function addnotes() {
+
+            tit = document.getElementById('title').value;
+            desc = document.getElementById('description').value;
+            if (localStorage.getItem('notesJson') == null) {
+                notesarray = [];
+                notesarray.push([tit, desc]);
+                localStorage.setItem('notesJson', JSON.stringify(notesarray))
+            } else {
+                notesarraystr = localStorage.getItem('notesJson');
+                notesarray = JSON.parse(notesarraystr)
+                notesarray.push([tit, desc]);
+                localStorage.setItem('notesJson', JSON.stringify(notesarray))
+            }
+            upadate()
+        }
+
+        function upadate() {
+            if (localStorage.getItem('notesJson') == null) {
+                notesarray = []
+                localStorage.setItem('notesJson', JSON.stringify(notesarray))
+            } else {
+                notesarraystr = localStorage.getItem('notesJson')
+                notesarray = JSON.parse(notesarraystr)
+            }
+            notebody = document.getElementById('body')
+            str = "";
+            notesarray.forEach((element, index) => {
+                str += `
+                <div class="border-2 w-full h-40  flex justify-between">
+                <div>
+                    <div class="title text-2xl font-semibold m-2">${element[0]}</div>
+
+
+                    <div class="m-2 font-serif text-lg">${element[1]}</div>
+                </div>
+
+                <div class="p-5 ">
+                    <button class="bg-orange-500 shadow-lg shadow-orange-500/50 p-2 text-lg rounded-lg font-bold pl-6 pr-6" id="add" onclick="deleted(${index})">Completed</button>
+                </div>
+
+            </div><br>
+            `
+            });
+            notebody.innerHTML = str;
+
+        }
+        upadate()
+        add = document.getElementById('add');
+        add.addEventListener('click', addnotes)
+
+        function deleted(itemIndex) {
+            notesarraystr = localStorage.getItem('notesJson')
+            notesarray = JSON.parse(notesarraystr)
+            notesarray.splice(itemIndex, 1)
+            localStorage.setItem('notesJson', JSON.stringify(notesarray))
+            upadate()
+        }
+    </script>
+</body>
+
+</html>
